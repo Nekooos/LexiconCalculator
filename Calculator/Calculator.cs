@@ -15,7 +15,7 @@ namespace Calculator
             isCalculatorRunning = true;
         }
 
-        public void start()
+        public void Start()
         {
             while (isCalculatorRunning)
             {
