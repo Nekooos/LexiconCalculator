@@ -7,19 +7,15 @@ namespace Calculator
     {
 
         private readonly List<String> menu;
-        bool isCalculatorRunning;
-
-        public Calculator()
-        {
-            menu = new List<String>() { "1. Calculate", "2. Exit Program\n" };
-            isCalculatorRunning = true;
-        }
 
         public void Start()
         {
+            List<String> menu = new List<String>() { "1. Calculate", "2. Exit Program\n" };
+            bool isCalculatorRunning = true;
+
             while (isCalculatorRunning)
             {
-                ShowMenu();
+                ShowMenu(menu);
                 int menuChoice = Convert.ToInt32(inputValue("Enter a menu choice: "));
 
                 if (menuChoice == 1)
@@ -44,34 +40,32 @@ namespace Calculator
             }
         }
 
-        private void ShowMenu()
+        private void ShowMenu(List<String> menu)
         {
             menu.ForEach(menuItem => Console.WriteLine(menuItem));
         }
 
         private double inputValue(String message)
         {
-            double value;
-
+            double value = 0;
             while (true)
             {
                 Console.WriteLine(message);
                 try
                 {
                     value = Convert.ToDouble(Console.ReadLine());
-                    break;
+                    return value;
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("Not a valid number");
                 }
             }
-            return value;
         }
 
         private string InputOperator()
         {
-            String mathOperator;
+            String mathOperator = "";
             while (true)
             {
                 Console.WriteLine("Enter operator: +, -, * or /");
@@ -79,15 +73,13 @@ namespace Calculator
 
                 if (mathOperator == "+" || mathOperator == "-" || mathOperator == "*" || mathOperator == "/")
                 {
-                    break;
+                    return mathOperator;
                 }
                 else
                 {
                     Console.WriteLine("Not a valid operator");
                 }
-
             }
-            return mathOperator;
         }
 
         private double Calculate(double value1, double value2, String mathOperator)
@@ -138,9 +130,9 @@ namespace Calculator
 
         private bool CheckInputDivideAndInputZero(double value1, double value2, String mathOperator)
         {
-            if (value1 == 0 || value2 == 0 && mathOperator.Equals("/"))
+            if ((value1 == 0 || value2 == 0) && mathOperator.Equals("/"))
             {
-                Console.WriteLine("Can't divide with 0");
+                Console.WriteLine("Can't divide with 0 \n");
                 return true;
             }
             else

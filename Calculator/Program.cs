@@ -7,7 +7,7 @@ namespace Calculator
         static void Main(string[] args)
         {
             Calculator calculator = new Calculator();
-            calculator.start();
+            calculator.Start();
         }
     }
 }
