@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Calculator
 {
     class Calculator
     {
-
-        private readonly List<String> menu;
-
+        private bool isCalculationZeroAndDivice = false;
         public void Start()
         {
             List<String> menu = new List<String>() { "1. Calculate", "2. Exit Program\n" };
@@ -20,16 +19,12 @@ namespace Calculator
 
                 if (menuChoice == 1)
                 {
-                    double number1 = inputValue("Enter the first number in the calculation");
-                    string mathOperator = InputOperator();
-                    double number2 = inputValue("Enter the second number in the calculation");
-                    bool isInputDivisionAndZero = CheckInputDivideAndInputZero(number1, number2, mathOperator);
-
-                    if (!isInputDivisionAndZero)
-                    {
-                        double result = Calculate(number1, number2, mathOperator);
-                        Console.WriteLine($"{number1} {mathOperator} {number2} = {result} \n");
-                    }
+                    Console.WriteLine("Enter a calculation with /, *, + and -. Example: 2+6/3-3*2");
+                    String input = Console.ReadLine();
+                    char[] inputArray = input.ToCharArray();
+                    List<String> calculation = combineCharsToNumberStrings(inputArray);
+                    String result = CalculateByOperator(calculation);
+                    Console.WriteLine(isCalculationZeroAndDivice ? "Can't divide with 0 \n" : "result: " + result);
                 }
 
                 else
@@ -38,6 +33,41 @@ namespace Calculator
                 }
 
             }
+        }
+
+        private List<String> combineCharsToNumberStrings(char[] inputArray)
+        {
+            List<String> calculation = new List<String>();
+            int lastOperator = 0;
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                if(checkOperator(inputArray[i]))
+                {
+                    calculation.Add(charsToNumberString(i, lastOperator, inputArray));
+                    calculation.Add(inputArray[i].ToString());
+                    lastOperator = i+1;
+                }
+                 else if(i == inputArray.Length-1)
+                {
+                    calculation.Add(charsToNumberString(i+ inputArray.Length-i, lastOperator, inputArray));
+                }
+            }
+            return calculation;
+        }
+
+        private bool checkOperator(char value)
+        {
+            return value.Equals('+') || value.Equals('-') || value.Equals('*') || value.Equals('/') ?  true :  false;
+        }
+
+        private String charsToNumberString(int stop, int start, char[] values)
+        {
+            String number = "";
+            for(int i = start; i < stop; i++)
+            {
+                number = number + values[i].ToString();
+            }
+            return number;
         }
 
         private void ShowMenu(List<String> menu)
@@ -63,23 +93,39 @@ namespace Calculator
             }
         }
 
-        private string InputOperator()
+        private String CalculateByOperator(List<String> calculations)
         {
-            String mathOperator = "";
-            while (true)
-            {
-                Console.WriteLine("Enter operator: +, -, * or /");
-                mathOperator = Console.ReadLine();
+            List<String> mathOperators = new List<String>() {"/", "*", "-", "+" };
 
-                if (mathOperator == "+" || mathOperator == "-" || mathOperator == "*" || mathOperator == "/")
+            double sum = 0;
+            foreach (String mathOperator in mathOperators)
+            {
+                for (int i = 0; i < calculations.Count; i++)
                 {
-                    return mathOperator;
-                }
-                else
-                {
-                    Console.WriteLine("Not a valid operator");
+                    if (calculations.ElementAt(i).Equals(mathOperator))
+                    {
+                        double value1 = Convert.ToDouble(calculations.ElementAt(i - 1));
+                        double value2 = Convert.ToDouble(calculations.ElementAt(i+1));
+                        isCalculationZeroAndDivice = CheckInputDivideAndInputZero(value2, mathOperator);
+                        sum = Calculate(value1, value2, mathOperator);
+                        calculations = DeleteUsedNumbers(i+1, i-1, calculations, sum);
+                        // Go back to beginning to check for operator in the modified list
+                        i = 0;
+                    }
                 }
             }
+            return calculations.ElementAt(0);
+        }
+
+        private List<String> DeleteUsedNumbers(int start, int stop, List<String> calculations, double sum)
+        {
+            for(int i = start ; i >= stop; i--)
+            {
+                calculations.RemoveAt(i);
+            }
+            calculations.Insert(stop, sum.ToString());
+
+            return calculations;
         }
 
         private double Calculate(double value1, double value2, String mathOperator)
@@ -89,23 +135,20 @@ namespace Calculator
             switch (mathOperator)
             {
                 case "+":
-                    result = Add(value1, value2);
-                    break;
+                    return Add(value1, value2);
 
                 case "-":
-                    result = Subtract(value1, value2);
-                    break;
+                    return Subtract(value1, value2);
+
 
                 case "*":
-                    result = Multiply(value1, value2);
-                    break;
+                    return Multiply(value1, value2);
 
                 case "/":
-                    result = Divide(value1, value2);
-                    break;
-            }
-
-            return result;
+                    return Divide(value1, value2);
+                default:
+                    return result;
+            }   
         }
 
         private double Add(double value1, double value2)
@@ -128,11 +171,10 @@ namespace Calculator
             return value1 / value2;
         }
 
-        private bool CheckInputDivideAndInputZero(double value1, double value2, String mathOperator)
+        private bool CheckInputDivideAndInputZero(double value, String mathOperator)
         {
-            if ((value1 == 0 || value2 == 0) && mathOperator.Equals("/"))
+            if (value == 0 && mathOperator.Equals("/"))
             {
-                Console.WriteLine("Can't divide with 0 \n");
                 return true;
             }
             else
