@@ -33,7 +33,7 @@ namespace CalculatorTestsXunit
 
             String result = calculatorService.CalculateByOperator(inputList);
             String expected = "Can't divide with 0 \n";
-            Console.WriteLine(result);
+
             Assert.Equal(expected, result);
         }
 
@@ -44,7 +44,7 @@ namespace CalculatorTestsXunit
 
             String result = calculatorService.CalculateByOperator(inputList);
             String expected = "result: -7";
-            Console.WriteLine(result);
+
             Assert.Equal(expected, result);
         }
 
@@ -65,7 +65,7 @@ namespace CalculatorTestsXunit
 
             String result = calculatorService.CalculateByOperator(inputList);
             String expected = "result: -16.2";
-            Console.WriteLine(result);
+
             Assert.Equal(expected, result);
         }
 
@@ -76,7 +76,7 @@ namespace CalculatorTestsXunit
 
             String result = calculatorService.CalculateByOperator(inputList);
             String expected = "result: 20";
-            Console.WriteLine(result);
+ 
             Assert.Equal(expected, result);
         }
 

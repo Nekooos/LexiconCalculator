@@ -66,7 +66,7 @@ namespace CalculatorProgram.Service
                     }
                 }
             }
-            return GetIsCalculationZeroAndDivide() ? "Can't divide with 0 \n" : "result: " + sum;
+            return isCalculationZeroAndDivide ? "Can't divide with 0 \n" : "result: " + sum;
         }
 
         private List<String> DeleteUsedNumbers(int start, int stop, List<String> calculations, double sum)
@@ -111,11 +111,6 @@ namespace CalculatorProgram.Service
             {
                 return isCalculationZeroAndDivide;
             }
-        }
-
-        public bool GetIsCalculationZeroAndDivide()
-        {
-            return isCalculationZeroAndDivide;
         }
     }
 }
