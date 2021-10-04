@@ -56,10 +56,10 @@ namespace CalculatorProgram.Service
             switch (mathOperator)
             {
                 case "+":
-                    return value1 + value2;
+                    return Addition(value1, value2);
 
                 case "-":
-                    return value1 - value2;
+                    return Subtraction(value1, value2);
 
 
                 case "*":
@@ -70,6 +70,26 @@ namespace CalculatorProgram.Service
                 default:
                     return 0;
             }
+        }
+
+        public double Addition(double value1, double value2)
+        {
+            return value1 + value2;
+        }
+
+        public double Addition(String[] calculation)
+        {
+            return Double.Parse(calculation[0]) + Double.Parse(calculation[2]);
+        }
+
+        public double Subtraction(double value1, double value2)
+        {
+            return value1 - value2;
+        }
+
+        public double Subtraction(String[] calculation)
+        {
+            return Double.Parse(calculation[0]) - Double.Parse(calculation[2]);
         }
 
         private bool CheckInputDivideAndInputZero(double value, String mathOperator)
