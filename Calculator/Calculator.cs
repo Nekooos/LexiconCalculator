@@ -32,8 +32,7 @@ namespace CalculatorProgram
                 {
                     Console.WriteLine("Enter a calculation with /, *, + and -. Example: 2+6/3-3*2");
                     String input = Console.ReadLine();
-                    char[] inputArray = input.ToCharArray();
-                    List<String> calculation = calculatorService.CombineCharsToNumberStrings(inputArray);
+                    List<String> calculation = calculatorService.StringToNumberStrings(input);
                     String result = calculatorService.CalculateByOperator(calculation);
                     Console.WriteLine(result);
                 }

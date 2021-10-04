@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CalculatorProgram.Service
 {
@@ -10,44 +9,16 @@ namespace CalculatorProgram.Service
     {
         private bool isCalculationZeroAndDivide;
 
-        public List<String> CombineCharsToNumberStrings(char[] inputArray)
+        public List<String> StringToNumberStrings(string input)
         {
-            isCalculationZeroAndDivide = false;
-            List<String> calculation = new List<String>();
-            int lastOperator = 0;
-            for (int i = 0; i < inputArray.Length; i++)
-            {
-                if (CheckOperator(inputArray[i]))
-                {
-                    calculation.Add(CharsToNumberString(i, lastOperator, inputArray));
-                    calculation.Add(inputArray[i].ToString());
-                    lastOperator = i + 1;
-                }
-                else if (i == inputArray.Length - 1)
-                {
-                    calculation.Add(CharsToNumberString(i + inputArray.Length - i, lastOperator, inputArray));
-                }
-            }
-            return calculation;
-        }
-
-        private bool CheckOperator(char value)
-        {
-            return value.Equals('+') || value.Equals('-') || value.Equals('*') || value.Equals('/') ? true : false;
-        }
-
-        private String CharsToNumberString(int stop, int start, char[] values)
-        {
-            String number = "";
-            for (int i = start; i < stop; i++)
-            {
-                number = number + values[i].ToString();
-            }
-            return number;
+            return Regex.Split(input, @"\s*([-+/*])\s*")
+                .Where(n => !string.IsNullOrEmpty(n))
+                .ToList();
         }
 
         public String CalculateByOperator(List<String> calculations)
         {
+            isCalculationZeroAndDivide = false;
             List<String> mathOperators = new List<String>() { "/", "*", "-", "+" };
 
             double sum = 0;

@@ -1,5 +1,6 @@
 
 using CalculatorProgram.Service;
+using CalculatorTests;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -18,21 +19,19 @@ namespace CalculatorTestsXunit
         [Fact]
         public void CombineCharsToNumberStringsTest()
         {
-            char[] calculationArray = "34+42*55/4".ToCharArray();
-            List<String> result = calculatorService.CombineCharsToNumberStrings(calculationArray);
+            string input = "34+42*55/4";
+            List<String> result = calculatorService.StringToNumberStrings(input);
 
             List<String> expectedList = new List<String>() { "34", "+", "42", "*", "55", "/", "4" };
 
             Assert.Equal(expectedList, result);
         }
 
-        [Fact]
-        public void DivisionZeroTest()
+        [Theory]
+        [MemberData(nameof(CalculatorTestData.DivisionZeroData), MemberType = typeof(CalculatorTestData))]
+        public void DivisionZeroTest(List<String> inputList, String expected)
         {
-            List<String> inputList = new List<String>() { "3", "+", "5", "-", "10", "*", "3", "/", "0" };
-
             String result = calculatorService.CalculateByOperator(inputList);
-            String expected = "Can't divide with 0 \n";
 
             Assert.Equal(expected, result);
         }
@@ -48,34 +47,27 @@ namespace CalculatorTestsXunit
             Assert.Equal(expected, result);
         }
 
-        [Fact]
-        public void AdditionTest() {
-            List<String> inputList = new List<String>() { "34.5", "+", "42.5", "+", "4.2"};
-
-            String result = calculatorService.CalculateByOperator(inputList);
-            String expected = "result: 81.2";
+        [Theory]
+        [MemberData(nameof(CalculatorTestData.AdditionData), MemberType = typeof(CalculatorTestData))]
+        public void AdditionTest(List<String> inputList, String expected) {
+            string result = calculatorService.CalculateByOperator(inputList);
 
             Assert.Equal(expected, result);
         }
 
-        [Fact]
-        public void SubtractionTest()
+        [Theory]
+        [MemberData(nameof(CalculatorTestData.SubtractionData), MemberType = typeof(CalculatorTestData))]
+        public void SubtractionTest(List<String> inputList, String expected)
         {
-            List<String> inputList = new List<String>() { "30.5", "-", "42.5", "-", "4.2" };
-
             String result = calculatorService.CalculateByOperator(inputList);
-            String expected = "result: -16.2";
-
             Assert.Equal(expected, result);
         }
 
-        [Fact]
-        public void MultiplyTest()
+        [Theory]
+        [MemberData(nameof(MultiplyData))]
+        public void MultiplyTest(List<String> inputList, String expected)
         {
-            List<String> inputList = new List<String>() { "4", "*", "2.5", "*", "2" };
-
             String result = calculatorService.CalculateByOperator(inputList);
-            String expected = "result: 20";
  
             Assert.Equal(expected, result);
         }
@@ -87,8 +79,16 @@ namespace CalculatorTestsXunit
 
             String result = calculatorService.CalculateByOperator(inputList);
             String expected = "result: 2";
-            Console.WriteLine(result);
+
             Assert.Equal(expected, result);
         }
+
+        public static IEnumerable<object[]> MultiplyData() =>
+            new List<object[]>
+            {
+                new object[] {new List<String>() { "2", "*", "3"}, "result: 6" },
+                new object[] {new List<String>() { "2", "*", "3.2"}, "result: 6.4" },
+                new object[] {new List<String>() { "4", "*", "2.5", "*", "2" }, "result: 20" }
+            };
     }
 }
