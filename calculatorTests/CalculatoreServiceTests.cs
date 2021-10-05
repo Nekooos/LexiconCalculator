@@ -83,12 +83,11 @@ namespace CalculatorTestsXunit
             Assert.Equal(expected, result);
         }
 
-        [Fact]
-        public void overLoadedAddition()
+        [Theory]
+        [InlineData(new String[] { "5", "+", "5" }, 10),]
+        public void overLoadedAddition(String[] calculation, double expected)
         {
-            String[] calculation = new String[] { "5", "+","5"};
             double result = calculatorService.Addition(calculation);
-            double expected = 10;
             Assert.Equal(expected, result);
         }
 
@@ -101,7 +100,7 @@ namespace CalculatorTestsXunit
             Assert.Equal(expected, result);
         }
 
-        public static IEnumerable<object[]> MultiplyData() =>
+    public static IEnumerable<object[]> MultiplyData() =>
             new List<object[]>
             {
                 new object[] {new List<String>() { "2", "*", "3"}, "result: 6" },

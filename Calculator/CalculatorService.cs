@@ -79,7 +79,15 @@ namespace CalculatorProgram.Service
 
         public double Addition(String[] calculation)
         {
-            return Double.Parse(calculation[0]) + Double.Parse(calculation[2]);
+            String[] numbers = removeOperators(calculation);
+
+            Double sum = 0;
+            foreach(String num in numbers)
+            {
+                sum = sum + Double.Parse(num);
+            }
+
+            return sum;
         }
 
         public double Subtraction(double value1, double value2)
@@ -89,7 +97,29 @@ namespace CalculatorProgram.Service
 
         public double Subtraction(String[] calculation)
         {
-            return Double.Parse(calculation[0]) - Double.Parse(calculation[2]);
+            String[] numbers = removeOperators(calculation);
+
+            Double sum = 0;
+            for(int i = 0; i < numbers.Length; i++)
+            {
+                if(i == 0)
+                {
+                    sum = Double.Parse(numbers[i]);
+                } 
+                else
+                {
+                    sum = sum - Double.Parse(numbers[i]);
+                }
+            }
+            return sum;
+        }
+
+        private String[] removeOperators(String[] calculation)
+        {
+            return Enumerable.Range(0, calculation.Length)
+                 .Where(i => i % 2 == 0)
+                 .Select(i => calculation[i])
+                 .ToArray();
         }
 
         private bool CheckInputDivideAndInputZero(double value, String mathOperator)
