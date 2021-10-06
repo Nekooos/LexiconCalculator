@@ -36,6 +36,24 @@ namespace CalculatorTestsXunit
             Assert.Equal(expected, result);
         }
 
+        [Fact(DisplayName = "Invalid input list Throws FormatException")]
+        public void invalidListInput()
+        {
+            List<String> inputList = new List<String>() { "b", "+", "5" };
+
+            Assert.Throws<FormatException>(() => calculatorService.CalculateByOperator(inputList));
+        }
+
+        [Fact(DisplayName = "Empty list Throws FormatException")]
+        public void emptyListInput()
+        {
+            List<String> inputList = new List<String>();
+
+            String result = calculatorService.CalculateByOperator(inputList);
+
+            Assert.Equal("result: 0", result);
+        }
+
         [Fact]
         public void MultiplyAndDivsionBeforeSubtractionAndAdditionTest()
         {

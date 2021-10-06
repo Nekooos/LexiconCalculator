@@ -34,7 +34,7 @@ namespace CalculatorTests
             {
                 new object[] {new List<String>() {"0", "/", "6"}, "result: 0"},
                 new object[] {new List<String>() {"6", "/", "0"}, "Can't divide with 0 \n"},
-                new object[] { new List<String>() { "16", "/", "4", "/", "0" }, "Can't divide with 0 \n"}
+                new object[] {new List<String>() { "16", "/", "4", "/", "0" }, "Can't divide with 0 \n"}
             };
     }
 }
